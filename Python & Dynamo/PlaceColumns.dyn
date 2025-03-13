@@ -1,0 +1,865 @@
+{
+  "Uuid": "aab66187-8f57-4aa9-98c1-22becee97749",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "PlaceColumns",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+      "HintPath": "D:\\Development\\BIM\\Columns.xlsx",
+      "InputValue": "..\\..\\..\\Columns.xlsx",
+      "NodeType": "ExtensionNode",
+      "Id": "e9103c2ccc254646aec4f781abdfe839",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f364abc5fee74a4aa3bce91cde02e444",
+          "Name": "",
+          "Description": "Filename",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows you to select a file on the system to get its filename"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Level 1",
+      "Id": "5bb07983e8b8404fa3f68dba3302eaff",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "328245884b0a4ddba3f4a75ed8648b2a",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\n# Import Revit API\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import Point\r\n\r\n# Input: Excel file path, level, and beam type data\r\nexcel_data = IN[0]  # Full path to the Excel file\r\nstart_point = []\r\nresult = \"\"\r\n\r\n#Iterate through the rows in Excel and place beams\r\nfor row in range(len(excel_data)):\r\n\ttry:\r\n\t\tis_available = True\r\n\t\t\r\n\t\tfor col in range(len(excel_data[0])):\r\n\t\t\tif excel_data[row][col] is None:\r\n\t\t\t\tis_available = False\r\n\t\t\t\tresult += str(row)+ \" The data is not accuraccy \\n\"\r\n\t\t\t\tbreak\r\n\t\r\n\t\tif is_available:\r\n\t\t\tstartX = float(excel_data[row][0])\r\n\t\t\tstartY = float(excel_data[row][1])\r\n\t\t\tstartZ = float(excel_data[row][2])\r\n\t\t\tendX = float(excel_data[row][0])\r\n\t\t\tendY = float(excel_data[row][1])\r\n\t\t\tendZ = float(excel_data[row][2]) + float(excel_data[row][3])\r\n\t\t\t\r\n\t\t\tresult += str(startX) + \", \" + str(startY) + \", \" + str(endX) + \", \" + str(endY)\r\n\t\t\t\r\n\t\t\tstart_point.append(Point.ByCoordinates(startX, startY, startZ))\r\n\r\n\texcept Exception as e:\r\n\t\tresult += str(e)+ \"\\n\"\r\n\t\tcontinue\r\n\t\t\r\n#Output: List of created beams\r\nOUT = start_point",
+      "VariableInputPorts": true,
+      "Id": "c077441a58244cf48b39226c39531e65",
+      "Inputs": [
+        {
+          "Id": "5c266e6b0a1b4d24803399c7a0d486be",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ba874d7d87cc4a6ab5be56e9e90c1abd",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "450 x 450mm",
+      "Id": "589d649824dd4dab8000a2cd6c769b7e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "18b4890a476a4383adafccf8fc4ed883",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSOffice.Data.ImportExcel@var,string,bool,bool",
+      "Id": "7e564aa7d2194ce4b849ec7705ba1044",
+      "Inputs": [
+        {
+          "Id": "a197e2ede62f4979a8e733d42a335530",
+          "Name": "file",
+          "Description": "File representing the Microsoft Excel spreadsheet.\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e1449d50cc0644c39ec658f0bb2b87d6",
+          "Name": "sheetName",
+          "Description": "Name of the worksheet containing the data.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "581b8c93003c4a7e8c1e2b8dfa7985a5",
+          "Name": "readAsStrings",
+          "Description": "Toggle to switch between reading Excel file as strings.\n\nbool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "54bae364613b4aef974c88f244a508a9",
+          "Name": "showExcel",
+          "Description": "Toggle to switch between showing and hiding the main Excel window.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d707f06dfae549a8960925d2bb9e0ff8",
+          "Name": "data",
+          "Description": "Rows of data from the Excel worksheet.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Read data from a Microsoft Excel spreadsheet. Data is read by row and returned in a series of lists by row. Rows and columns are zero-indexed; for example, the value in cell A1 will appear in the data list at [0,0]. This node requires Microsoft Excel to be installed.\n\nData.ImportExcel (file: var, sheetName: string, readAsStrings: bool = false, showExcel: bool = true): var[][]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Columns",
+      "Id": "8c52d282f40a4f348aa15b500c3a4c76",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f4e13d1e958c4e92b0b5c296f36b544e",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.FileObject, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "e0756cb9c969441e9446203ddea077d3",
+      "Inputs": [
+        {
+          "Id": "bd9f028a0926409193d719126bf85108",
+          "Name": "path",
+          "Description": "Path to the file.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ab93323b5dcb4bc7b2196a7ec2175d06",
+          "Name": "file",
+          "Description": "File object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a file object from a path."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "36b97d426e1d4465b9800bb5cb5f935f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b7d926e5f4f74d8e8328a49f22c217a0",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Line.ByStartPointEndPoint@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
+      "Id": "dc82a4c25e124622b65752cd0fcdb4bb",
+      "Inputs": [
+        {
+          "Id": "422cfd0e756f430ea14279df27c6b097",
+          "Name": "startPoint",
+          "Description": "Point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "430bee96833c454cb1173576ab2c818b",
+          "Name": "endPoint",
+          "Description": "Point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ceecd9107dd24a5c9a15ef872a0ffae9",
+          "Name": "Line",
+          "Description": "Line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Creates a straight Line between two input Points.\n\nLine.ByStartPointEndPoint (startPoint: Point, endPoint: Point): Line"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\n# Import Revit API\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import Point\r\n\r\n# Input: Excel file path, level, and beam type data\r\nexcel_data = IN[0]  # Full path to the Excel file\r\nend_point = []\r\nresult = \"\"\r\n\r\n#Iterate through the rows in Excel and place beams\r\nfor row in range(len(excel_data)):\r\n\ttry:\r\n\t\tis_available = True\r\n\t\t\r\n\t\tfor col in range(len(excel_data[0])):\r\n\t\t\tif excel_data[row][col] is None:\r\n\t\t\t\tis_available = False\r\n\t\t\t\tresult += str(row)+ \" The data is not accuraccy \\n\"\r\n\t\t\t\tbreak\r\n\t\r\n\t\tif is_available:\r\n\t\t\tstartX = float(excel_data[row][0])\r\n\t\t\tstartY = float(excel_data[row][1])\r\n\t\t\tstartZ = float(excel_data[row][2])\r\n\t\t\tendX = float(excel_data[row][0])\r\n\t\t\tendY = float(excel_data[row][1])\r\n\t\t\tendZ = float(excel_data[row][2]) + float(excel_data[row][3])\r\n\t\t\t\r\n\t\t\tresult += str(startX) + \", \" + str(startY) + \", \" + str(endX) + \", \" + str(endY)\r\n\t\t\t\r\n\t\t\tend_point.append(Point.ByCoordinates(endX, endY, endZ))\r\n\r\n\texcept Exception as e:\r\n\t\tresult += str(e)+ \"\\n\"\r\n\t\tcontinue\r\n\t\t\r\n#Output: List of created beams\r\nOUT = end_point",
+      "VariableInputPorts": true,
+      "Id": "15410d0e15c34ef3b5a8a230f801c5a6",
+      "Inputs": [
+        {
+          "Id": "9b8662012ef84ad6854e1ab07994f2ae",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c11057cf23b3413786887023fbe7a3a7",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Import necessary modules\r\nimport clr\r\n\r\n# Import Revit Services\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\n# Import Revit API\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import FilteredElementCollector, BuiltInCategory, Level\r\n\r\n# Get the current Revit document\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# Input: Level name to search for\r\nlevel_name = IN[0]  # Input comes from Dynamo\r\n\r\n# Collect all levels in the project\r\nlevels_collector = FilteredElementCollector(doc)\\\r\n    .OfCategory(BuiltInCategory.OST_Levels)\\\r\n    .WhereElementIsNotElementType()\r\n\r\n# Find the level by name\r\nmatched_level = None\r\n\r\nfor level in levels_collector:\r\n    if level.Name == level_name:\r\n        matched_level = level\r\n        break\r\n\r\nif matched_level is None:\r\n\tmatched_level = levels_collector.FirstElement()\r\n\r\n# Output the matched level or None if not found\r\nOUT = matched_level\r\n",
+      "VariableInputPorts": true,
+      "Id": "db612c9eb46c4e0dad43d9f6a231d2d5",
+      "Inputs": [
+        {
+          "Id": "ceda472530504aa8a3d9ef785ca35bd9",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "394cba6e80d241339be2a4ae92b4c50f",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Import Revit Services\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\n# Import Revit API\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.Creation import ItemFactoryBase\r\n\r\n# Get the current Revit document\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication\r\napp = uiapp.Application\r\n\r\n# The inputs to this node will be stored as a list in the IN variables.\r\ncolumn_type_name = IN[0] \r\n\r\n# Get the beam type from the Revit document by name\r\ncolumn_type = None\r\ncolumn_types = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_StructuralColumns).WhereElementIsElementType()\r\n\r\nif column_type is None:\r\n\tcolumn_type = column_types.FirstElement()\r\n\r\n# Place your code below this line\r\n\r\n# Assign your output to the OUT variable.\r\nOUT = column_type",
+      "VariableInputPorts": true,
+      "Id": "1d422df154554e17b66ec874c1768f69",
+      "Inputs": [
+        {
+          "Id": "2637075dd2654973a1e64cae97e877e1",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "982190c4dd884ce5877812640012c599",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "54789a6003d048ec97e66c10564c5aa4",
+      "Inputs": [
+        {
+          "Id": "733979d900be41f5bd9dc5a7b5eaa6e0",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "df606a2252d9494fa3d53d615a4aab5a",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "8a9781d38d964c619ef05ad037c9a565",
+      "Inputs": [
+        {
+          "Id": "434d9a75831c420faf1c3ffe8a633f28",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "bc5a1b8d2e2343e98863ec5856720f88",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "b5bdbddd8a714b7cb93a7ba875f34bd9",
+      "Inputs": [
+        {
+          "Id": "b6b89c01415640f8aff17571ec046821",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "95237a02b9514b9294c95b1abb00de6b",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "831635781571428ca407176c658179d3",
+      "Inputs": [
+        {
+          "Id": "2dfa2099eb5f424a98e4ec302ade743d",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "62f2b90e894b484f9af4ab045901a583",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.StructuralFraming.ColumnByCurve@Autodesk.DesignScript.Geometry.Curve,Revit.Elements.Level,Revit.Elements.FamilyType",
+      "Id": "02439262a62743a7bd6047e41cc7abaf",
+      "Inputs": [
+        {
+          "Id": "627e2c42fce44593b826ebb026672341",
+          "Name": "curve",
+          "Description": "The curve which defines the center line of the column.\n\nCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "03b4a6ff16de48f3a089dd0011138141",
+          "Name": "level",
+          "Description": "The level with which you'd like the column to be associated.\n\nLevel",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b6416eb73bdb4670b31e3a2fbbdb4b66",
+          "Name": "structuralColumnType",
+          "Description": "The structural column type representing the column.\n\nFamilyType",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ff3e4ae9c9284ee78514c3f8f8e5a65a",
+          "Name": "StructuralFraming",
+          "Description": "StructuralFraming",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create a column.\n\nStructuralFraming.ColumnByCurve (curve: Curve, level: Level, structuralColumnType: FamilyType): StructuralFraming"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "b763bd10dfe14445af419b097f60e651",
+      "Inputs": [
+        {
+          "Id": "d673228b901d40ec9b210ed1524ef161",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "43e23e644aa84061b6e7a55f9c562faa",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "f364abc5fee74a4aa3bce91cde02e444",
+      "End": "bd9f028a0926409193d719126bf85108",
+      "Id": "185df92c23f444308337c3df33768690"
+    },
+    {
+      "Start": "328245884b0a4ddba3f4a75ed8648b2a",
+      "End": "ceda472530504aa8a3d9ef785ca35bd9",
+      "Id": "09d32838a8754747bc383dc14381012d"
+    },
+    {
+      "Start": "ba874d7d87cc4a6ab5be56e9e90c1abd",
+      "End": "422cfd0e756f430ea14279df27c6b097",
+      "Id": "32d4b33b6f98488c916dabefe715322c"
+    },
+    {
+      "Start": "ba874d7d87cc4a6ab5be56e9e90c1abd",
+      "End": "2dfa2099eb5f424a98e4ec302ade743d",
+      "Id": "10e3dae900d54b7f8b060530aea176e2"
+    },
+    {
+      "Start": "18b4890a476a4383adafccf8fc4ed883",
+      "End": "2637075dd2654973a1e64cae97e877e1",
+      "Id": "8bf67e0900af44929b472cfba8243a89"
+    },
+    {
+      "Start": "d707f06dfae549a8960925d2bb9e0ff8",
+      "End": "5c266e6b0a1b4d24803399c7a0d486be",
+      "Id": "53d5a839af7c4a14a8d7a346dea62ba9"
+    },
+    {
+      "Start": "d707f06dfae549a8960925d2bb9e0ff8",
+      "End": "9b8662012ef84ad6854e1ab07994f2ae",
+      "Id": "eadb0f38aa30444194efa04f627fdebf"
+    },
+    {
+      "Start": "d707f06dfae549a8960925d2bb9e0ff8",
+      "End": "d673228b901d40ec9b210ed1524ef161",
+      "Id": "95059a881e7a4df3b6b5da26b4638114"
+    },
+    {
+      "Start": "f4e13d1e958c4e92b0b5c296f36b544e",
+      "End": "e1449d50cc0644c39ec658f0bb2b87d6",
+      "Id": "e562e6ccd72f469f83f7b3b19518fe56"
+    },
+    {
+      "Start": "ab93323b5dcb4bc7b2196a7ec2175d06",
+      "End": "a197e2ede62f4979a8e733d42a335530",
+      "Id": "10913cc95d6c42919ecf0fee2f9b2d51"
+    },
+    {
+      "Start": "b7d926e5f4f74d8e8328a49f22c217a0",
+      "End": "581b8c93003c4a7e8c1e2b8dfa7985a5",
+      "Id": "ca6f7484876741738fcff9e80871054a"
+    },
+    {
+      "Start": "ceecd9107dd24a5c9a15ef872a0ffae9",
+      "End": "b6b89c01415640f8aff17571ec046821",
+      "Id": "e825a6a9847a4a30b10d2fc520a3a036"
+    },
+    {
+      "Start": "ceecd9107dd24a5c9a15ef872a0ffae9",
+      "End": "627e2c42fce44593b826ebb026672341",
+      "Id": "6d2649dbc18e4ac580a42f6d76c65794"
+    },
+    {
+      "Start": "c11057cf23b3413786887023fbe7a3a7",
+      "End": "430bee96833c454cb1173576ab2c818b",
+      "Id": "60d08a4317c54542864690bece4b0854"
+    },
+    {
+      "Start": "394cba6e80d241339be2a4ae92b4c50f",
+      "End": "434d9a75831c420faf1c3ffe8a633f28",
+      "Id": "1f2af82e50bc408d8f48b1e5f9ca613d"
+    },
+    {
+      "Start": "394cba6e80d241339be2a4ae92b4c50f",
+      "End": "03b4a6ff16de48f3a089dd0011138141",
+      "Id": "14e7b0041e27415f81f2a7bd6f312ee8"
+    },
+    {
+      "Start": "982190c4dd884ce5877812640012c599",
+      "End": "733979d900be41f5bd9dc5a7b5eaa6e0",
+      "Id": "4d1220f0fa594891a6b9dc0986f13c38"
+    },
+    {
+      "Start": "982190c4dd884ce5877812640012c599",
+      "End": "b6416eb73bdb4670b31e3a2fbbdb4b66",
+      "Id": "e3c03ddb617543a5944784e828414585"
+    }
+  ],
+  "Dependencies": [],
+  "Bindings": [
+    {
+      "NodeId": "02439262-a627-43a7-bd60-47e41cc7abaf",
+      "Binding": {
+        "ColumnByCurve_InClassDecl-1_InFunctionScope-1_Instance0_02439262-a627-43a7-bd60-47e41cc7abaf": "PFNPQVAtRU5WOkVudmVsb3BlIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOnhzZD0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOlNPQVAtRU5DPSJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy9zb2FwL2VuY29kaW5nLyIgeG1sbnM6U09BUC1FTlY9Imh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3NvYXAvZW52ZWxvcGUvIiB4bWxuczpjbHI9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vc29hcC9lbmNvZGluZy9jbHIvMS4wIiBTT0FQLUVOVjplbmNvZGluZ1N0eWxlPSJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy9zb2FwL2VuY29kaW5nLyI+DQo8U09BUC1FTlY6Qm9keT4NCjxhMTpDYWxsU2l0ZV94MDAyQl9UcmFjZVNlcmlhbGlzZXJIZWxwZXIgaWQ9InJlZi0xIiB4bWxuczphMT0iaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS9jbHIvbnNhc3NlbS9Qcm90b0NvcmUvUHJvdG9Db3JlJTJDJTIwVmVyc2lvbiUzRDIuMS4wLjc1MDAlMkMlMjBDdWx0dXJlJTNEbmV1dHJhbCUyQyUyMFB1YmxpY0tleVRva2VuJTNEbnVsbCI+DQo8TnVtYmVyT2ZFbGVtZW50cz4xPC9OdW1iZXJPZkVsZW1lbnRzPg0KPEJhc2UtMF9IYXNEYXRhPmZhbHNlPC9CYXNlLTBfSGFzRGF0YT4NCjxCYXNlLTBfSGFzTmVzdGVkRGF0YT50cnVlPC9CYXNlLTBfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTBfTmVzdGVkRGF0YUNvdW50PjExPC9CYXNlLTBfTmVzdGVkRGF0YUNvdW50Pg0KPEJhc2UtMC0wX0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTBfSGFzRGF0YT4NCjxCYXNlLTAtMF9EYXRhIGlkPSJyZWYtMyI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVkpaQ0JwWkQwaWNtVm1MVEVpSUhodGJHNXpPbUV4UFNKb2RIUndPaTh2YzJOb1pXMWhjeTV0YVdOeWIzTnZablF1WTI5dEwyTnNjaTl1YzJGemMyVnRMMUpsZG1sMFUyVnlkbWxqWlhNdVVHVnljMmx6ZEdWdVkyVXZVbVYyYVhSVFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFdU1DNDNOek16SlRKREpUSXdRM1ZzZEhWeVpTVXpSRzVsZFhSeVlXd2xNa01sTWpCUWRXSnNhV05MWlhsVWIydGxiaVV6Ukc1MWJHd2lQZzBLUEhOMGNtbHVaMGxFSUdsa1BTSnlaV1l0TXlJK09ERmlZbUpqWVdFdE9EYzJNUzAwWm1NeExXSmhaRFF0WVRnNFpHWTVaVE15WXpsakxUQXdNRFUxTlRnMlBDOXpkSEpwYm1kSlJENE5DanhwYm5SSlJENHpORGsxTnpROEwybHVkRWxFUGcwS1BDOWhNVHBUWlhKcFlXeHBlbUZpYkdWSlpENE5Dand2VTA5QlVDMUZUbFk2UW05a2VUNE5Dand2VTA5QlVDMUZUbFk2Ulc1MlpXeHZjR1UrRFFvPTwvQmFzZS0wLTBfRGF0YT4NCjxCYXNlLTAtMF9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMF9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0xX0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTFfSGFzRGF0YT4NCjxCYXNlLTAtMV9EYXRhIGlkPSJyZWYtNCI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVkpaQ0JwWkQwaWNtVm1MVEVpSUhodGJHNXpPbUV4UFNKb2RIUndPaTh2YzJOb1pXMWhjeTV0YVdOeWIzTnZablF1WTI5dEwyTnNjaTl1YzJGemMyVnRMMUpsZG1sMFUyVnlkbWxqWlhNdVVHVnljMmx6ZEdWdVkyVXZVbVYyYVhSVFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFdU1DNDNOek16SlRKREpUSXdRM1ZzZEhWeVpTVXpSRzVsZFhSeVlXd2xNa01sTWpCUWRXSnNhV05MWlhsVWIydGxiaVV6Ukc1MWJHd2lQZzBLUEhOMGNtbHVaMGxFSUdsa1BTSnlaV1l0TXlJK09ERmlZbUpqWVdFdE9EYzJNUzAwWm1NeExXSmhaRFF0WVRnNFpHWTVaVE15WXpsakxUQXdNRFUxTlRnNFBDOXpkSEpwYm1kSlJENE5DanhwYm5SSlJENHpORGsxTnpZOEwybHVkRWxFUGcwS1BDOWhNVHBUWlhKcFlXeHBlbUZpYkdWSlpENE5Dand2VTA5QlVDMUZUbFk2UW05a2VUNE5Dand2VTA5QlVDMUZUbFk2Ulc1MlpXeHZjR1UrRFFvPTwvQmFzZS0wLTFfRGF0YT4NCjxCYXNlLTAtMV9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMV9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0yX0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTJfSGFzRGF0YT4NCjxCYXNlLTAtMl9EYXRhIGlkPSJyZWYtNSI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVkpaQ0JwWkQwaWNtVm1MVEVpSUhodGJHNXpPbUV4UFNKb2RIUndPaTh2YzJOb1pXMWhjeTV0YVdOeWIzTnZablF1WTI5dEwyTnNjaTl1YzJGemMyVnRMMUpsZG1sMFUyVnlkbWxqWlhNdVVHVnljMmx6ZEdWdVkyVXZVbVYyYVhSVFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFdU1DNDNOek16SlRKREpUSXdRM1ZzZEhWeVpTVXpSRzVsZFhSeVlXd2xNa01sTWpCUWRXSnNhV05MWlhsVWIydGxiaVV6Ukc1MWJHd2lQZzBLUEhOMGNtbHVaMGxFSUdsa1BTSnlaV1l0TXlJK09ERmlZbUpqWVdFdE9EYzJNUzAwWm1NeExXSmhaRFF0WVRnNFpHWTVaVE15WXpsakxUQXdNRFUxTlRoaFBDOXpkSEpwYm1kSlJENE5DanhwYm5SSlJENHpORGsxTnpnOEwybHVkRWxFUGcwS1BDOWhNVHBUWlhKcFlXeHBlbUZpYkdWSlpENE5Dand2VTA5QlVDMUZUbFk2UW05a2VUNE5Dand2VTA5QlVDMUZUbFk2Ulc1MlpXeHZjR1UrRFFvPTwvQmFzZS0wLTJfRGF0YT4NCjxCYXNlLTAtMl9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMl9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0zX0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTNfSGFzRGF0YT4NCjxCYXNlLTAtM19EYXRhIGlkPSJyZWYtNiI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVkpaQ0JwWkQwaWNtVm1MVEVpSUhodGJHNXpPbUV4UFNKb2RIUndPaTh2YzJOb1pXMWhjeTV0YVdOeWIzTnZablF1WTI5dEwyTnNjaTl1YzJGemMyVnRMMUpsZG1sMFUyVnlkbWxqWlhNdVVHVnljMmx6ZEdWdVkyVXZVbVYyYVhSVFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFdU1DNDNOek16SlRKREpUSXdRM1ZzZEhWeVpTVXpSRzVsZFhSeVlXd2xNa01sTWpCUWRXSnNhV05MWlhsVWIydGxiaVV6Ukc1MWJHd2lQZzBLUEhOMGNtbHVaMGxFSUdsa1BTSnlaV1l0TXlJK09ERmlZbUpqWVdFdE9EYzJNUzAwWm1NeExXSmhaRFF0WVRnNFpHWTVaVE15WXpsakxUQXdNRFUxTlRoalBDOXpkSEpwYm1kSlJENE5DanhwYm5SSlJENHpORGsxT0RBOEwybHVkRWxFUGcwS1BDOWhNVHBUWlhKcFlXeHBlbUZpYkdWSlpENE5Dand2VTA5QlVDMUZUbFk2UW05a2VUNE5Dand2VTA5QlVDMUZUbFk2Ulc1MlpXeHZjR1UrRFFvPTwvQmFzZS0wLTNfRGF0YT4NCjxCYXNlLTAtM19IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtM19IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC00X0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTRfSGFzRGF0YT4NCjxCYXNlLTAtNF9EYXRhIGlkPSJyZWYtNyI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVkpaQ0JwWkQwaWNtVm1MVEVpSUhodGJHNXpPbUV4UFNKb2RIUndPaTh2YzJOb1pXMWhjeTV0YVdOeWIzTnZablF1WTI5dEwyTnNjaTl1YzJGemMyVnRMMUpsZG1sMFUyVnlkbWxqWlhNdVVHVnljMmx6ZEdWdVkyVXZVbVYyYVhSVFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFdU1DNDNOek16SlRKREpUSXdRM1ZzZEhWeVpTVXpSRzVsZFhSeVlXd2xNa01sTWpCUWRXSnNhV05MWlhsVWIydGxiaVV6Ukc1MWJHd2lQZzBLUEhOMGNtbHVaMGxFSUdsa1BTSnlaV1l0TXlJK09ERmlZbUpqWVdFdE9EYzJNUzAwWm1NeExXSmhaRFF0WVRnNFpHWTVaVE15WXpsakxUQXdNRFUxTlRobFBDOXpkSEpwYm1kSlJENE5DanhwYm5SSlJENHpORGsxT0RJOEwybHVkRWxFUGcwS1BDOWhNVHBUWlhKcFlXeHBlbUZpYkdWSlpENE5Dand2VTA5QlVDMUZUbFk2UW05a2VUNE5Dand2VTA5QlVDMUZUbFk2Ulc1MlpXeHZjR1UrRFFvPTwvQmFzZS0wLTRfRGF0YT4NCjxCYXNlLTAtNF9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtNF9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC01X0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTVfSGFzRGF0YT4NCjxCYXNlLTAtNV9EYXRhIGlkPSJyZWYtOCI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVkpaQ0JwWkQwaWNtVm1MVEVpSUhodGJHNXpPbUV4UFNKb2RIUndPaTh2YzJOb1pXMWhjeTV0YVdOeWIzTnZablF1WTI5dEwyTnNjaTl1YzJGemMyVnRMMUpsZG1sMFUyVnlkbWxqWlhNdVVHVnljMmx6ZEdWdVkyVXZVbVYyYVhSVFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFdU1DNDNOek16SlRKREpUSXdRM1ZzZEhWeVpTVXpSRzVsZFhSeVlXd2xNa01sTWpCUWRXSnNhV05MWlhsVWIydGxiaVV6Ukc1MWJHd2lQZzBLUEhOMGNtbHVaMGxFSUdsa1BTSnlaV1l0TXlJK09ERmlZbUpqWVdFdE9EYzJNUzAwWm1NeExXSmhaRFF0WVRnNFpHWTVaVE15WXpsakxUQXdNRFUxTlRrd1BDOXpkSEpwYm1kSlJENE5DanhwYm5SSlJENHpORGsxT0RROEwybHVkRWxFUGcwS1BDOWhNVHBUWlhKcFlXeHBlbUZpYkdWSlpENE5Dand2VTA5QlVDMUZUbFk2UW05a2VUNE5Dand2VTA5QlVDMUZUbFk2Ulc1MlpXeHZjR1UrRFFvPTwvQmFzZS0wLTVfRGF0YT4NCjxCYXNlLTAtNV9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtNV9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC02X0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTZfSGFzRGF0YT4NCjxCYXNlLTAtNl9EYXRhIGlkPSJyZWYtOSI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVkpaQ0JwWkQwaWNtVm1MVEVpSUhodGJHNXpPbUV4UFNKb2RIUndPaTh2YzJOb1pXMWhjeTV0YVdOeWIzTnZablF1WTI5dEwyTnNjaTl1YzJGemMyVnRMMUpsZG1sMFUyVnlkbWxqWlhNdVVHVnljMmx6ZEdWdVkyVXZVbVYyYVhSVFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFdU1DNDNOek16SlRKREpUSXdRM1ZzZEhWeVpTVXpSRzVsZFhSeVlXd2xNa01sTWpCUWRXSnNhV05MWlhsVWIydGxiaVV6Ukc1MWJHd2lQZzBLUEhOMGNtbHVaMGxFSUdsa1BTSnlaV1l0TXlJK09ERmlZbUpqWVdFdE9EYzJNUzAwWm1NeExXSmhaRFF0WVRnNFpHWTVaVE15WXpsakxUQXdNRFUxTlRreVBDOXpkSEpwYm1kSlJENE5DanhwYm5SSlJENHpORGsxT0RZOEwybHVkRWxFUGcwS1BDOWhNVHBUWlhKcFlXeHBlbUZpYkdWSlpENE5Dand2VTA5QlVDMUZUbFk2UW05a2VUNE5Dand2VTA5QlVDMUZUbFk2Ulc1MlpXeHZjR1UrRFFvPTwvQmFzZS0wLTZfRGF0YT4NCjxCYXNlLTAtNl9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtNl9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC03X0hhc0RhdGE+dHJ1ZTwvQmFzZS0wLTdfSGFzRGF0YT4NCjxCYXNlLTAtN19EYXRhIGlkPSJyZWYtMTAiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZKWkNCcFpEMGljbVZtTFRFaUlIaHRiRzV6T21FeFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1dGFXTnliM052Wm5RdVkyOXRMMk5zY2k5dWMyRnpjMlZ0TDFKbGRtbDBVMlZ5ZG1salpYTXVVR1Z5YzJsemRHVnVZMlV2VW1WMmFYUlRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXVNQzQzTnpNekpUSkRKVEl3UTNWc2RIVnlaU1V6Ukc1bGRYUnlZV3dsTWtNbE1qQlFkV0pzYVdOTFpYbFViMnRsYmlVelJHNTFiR3dpUGcwS1BITjBjbWx1WjBsRUlHbGtQU0p5WldZdE15SStPREZpWW1KallXRXRPRGMyTVMwMFptTXhMV0poWkRRdFlUZzRaR1k1WlRNeVl6bGpMVEF3TURVMU5UazBQQzl6ZEhKcGJtZEpSRDROQ2p4cGJuUkpSRDR6TkRrMU9EZzhMMmx1ZEVsRVBnMEtQQzloTVRwVFpYSnBZV3hwZW1GaWJHVkpaRDROQ2p3dlUwOUJVQzFGVGxZNlFtOWtlVDROQ2p3dlUwOUJVQzFGVGxZNlJXNTJaV3h2Y0dVK0RRbz08L0Jhc2UtMC03X0RhdGE+DQo8QmFzZS0wLTdfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTdfSGFzTmVzdGVkRGF0YT4NCjxCYXNlLTAtOF9IYXNEYXRhPnRydWU8L0Jhc2UtMC04X0hhc0RhdGE+DQo8QmFzZS0wLThfRGF0YSBpZD0icmVmLTExIj5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSlpDQnBaRDBpY21WbUxURWlJSGh0Ykc1ek9tRXhQU0pvZEhSd09pOHZjMk5vWlcxaGN5NXRhV055YjNOdlpuUXVZMjl0TDJOc2NpOXVjMkZ6YzJWdEwxSmxkbWwwVTJWeWRtbGpaWE11VUdWeWMybHpkR1Z1WTJVdlVtVjJhWFJUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakV1TUM0M056TXpKVEpESlRJd1EzVnNkSFZ5WlNVelJHNWxkWFJ5WVd3bE1rTWxNakJRZFdKc2FXTkxaWGxVYjJ0bGJpVXpSRzUxYkd3aVBnMEtQSE4wY21sdVowbEVJR2xrUFNKeVpXWXRNeUkrT0RGaVltSmpZV0V0T0RjMk1TMDBabU14TFdKaFpEUXRZVGc0WkdZNVpUTXlZemxqTFRBd01EVTFOVGsyUEM5emRISnBibWRKUkQ0TkNqeHBiblJKUkQ0ek5EazFPVEE4TDJsdWRFbEVQZzBLUEM5aE1UcFRaWEpwWVd4cGVtRmliR1ZKWkQ0TkNqd3ZVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqd3ZVMDlCVUMxRlRsWTZSVzUyWld4dmNHVStEUW89PC9CYXNlLTAtOF9EYXRhPg0KPEJhc2UtMC04X0hhc05lc3RlZERhdGE+ZmFsc2U8L0Jhc2UtMC04X0hhc05lc3RlZERhdGE+DQo8QmFzZS0wLTlfSGFzRGF0YT50cnVlPC9CYXNlLTAtOV9IYXNEYXRhPg0KPEJhc2UtMC05X0RhdGEgaWQ9InJlZi0xMiI+UEZOUFFWQXRSVTVXT2tWdWRtVnNiM0JsSUhodGJHNXpPbmh6YVQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0V0YVc1emRHRnVZMlVpSUhodGJHNXpPbmh6WkQwaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNUzlZVFV4VFkyaGxiV0VpSUhodGJHNXpPbE5QUVZBdFJVNURQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SWdlRzFzYm5NNlUwOUJVQzFGVGxZOUltaDBkSEE2THk5elkyaGxiV0Z6TG5odGJITnZZWEF1YjNKbkwzTnZZWEF2Wlc1MlpXeHZjR1V2SWlCNGJXeHVjenBqYkhJOUltaDBkSEE2THk5elkyaGxiV0Z6TG0xcFkzSnZjMjltZEM1amIyMHZjMjloY0M5bGJtTnZaR2x1Wnk5amJISXZNUzR3SWlCVFQwRlFMVVZPVmpwbGJtTnZaR2x1WjFOMGVXeGxQU0pvZEhSd09pOHZjMk5vWlcxaGN5NTRiV3h6YjJGd0xtOXlaeTl6YjJGd0wyVnVZMjlrYVc1bkx5SStEUW84VTA5QlVDMUZUbFk2UW05a2VUNE5DanhoTVRwVFpYSnBZV3hwZW1GaWJHVkpaQ0JwWkQwaWNtVm1MVEVpSUhodGJHNXpPbUV4UFNKb2RIUndPaTh2YzJOb1pXMWhjeTV0YVdOeWIzTnZablF1WTI5dEwyTnNjaTl1YzJGemMyVnRMMUpsZG1sMFUyVnlkbWxqWlhNdVVHVnljMmx6ZEdWdVkyVXZVbVYyYVhSVFpYSjJhV05sY3lVeVF5VXlNRlpsY25OcGIyNGxNMFF5TGpFdU1DNDNOek16SlRKREpUSXdRM1ZzZEhWeVpTVXpSRzVsZFhSeVlXd2xNa01sTWpCUWRXSnNhV05MWlhsVWIydGxiaVV6Ukc1MWJHd2lQZzBLUEhOMGNtbHVaMGxFSUdsa1BTSnlaV1l0TXlJK09ERmlZbUpqWVdFdE9EYzJNUzAwWm1NeExXSmhaRFF0WVRnNFpHWTVaVE15WXpsakxUQXdNRFUxTlRrNFBDOXpkSEpwYm1kSlJENE5DanhwYm5SSlJENHpORGsxT1RJOEwybHVkRWxFUGcwS1BDOWhNVHBUWlhKcFlXeHBlbUZpYkdWSlpENE5Dand2VTA5QlVDMUZUbFk2UW05a2VUNE5Dand2VTA5QlVDMUZUbFk2Ulc1MlpXeHZjR1UrRFFvPTwvQmFzZS0wLTlfRGF0YT4NCjxCYXNlLTAtOV9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtOV9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0xMF9IYXNEYXRhPnRydWU8L0Jhc2UtMC0xMF9IYXNEYXRhPg0KPEJhc2UtMC0xMF9EYXRhIGlkPSJyZWYtMTMiPlBGTlBRVkF0UlU1V09rVnVkbVZzYjNCbElIaHRiRzV6T25oemFUMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFdGFXNXpkR0Z1WTJVaUlIaHRiRzV6T25oelpEMGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TVM5WVRVeFRZMmhsYldFaUlIaHRiRzV6T2xOUFFWQXRSVTVEUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUlnZUcxc2JuTTZVMDlCVUMxRlRsWTlJbWgwZEhBNkx5OXpZMmhsYldGekxuaHRiSE52WVhBdWIzSm5MM052WVhBdlpXNTJaV3h2Y0dVdklpQjRiV3h1Y3pwamJISTlJbWgwZEhBNkx5OXpZMmhsYldGekxtMXBZM0p2YzI5bWRDNWpiMjB2YzI5aGNDOWxibU52WkdsdVp5OWpiSEl2TVM0d0lpQlRUMEZRTFVWT1ZqcGxibU52WkdsdVoxTjBlV3hsUFNKb2RIUndPaTh2YzJOb1pXMWhjeTU0Yld4emIyRndMbTl5Wnk5emIyRndMMlZ1WTI5a2FXNW5MeUkrRFFvOFUwOUJVQzFGVGxZNlFtOWtlVDROQ2p4aE1UcFRaWEpwWVd4cGVtRmliR1ZKWkNCcFpEMGljbVZtTFRFaUlIaHRiRzV6T21FeFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1dGFXTnliM052Wm5RdVkyOXRMMk5zY2k5dWMyRnpjMlZ0TDFKbGRtbDBVMlZ5ZG1salpYTXVVR1Z5YzJsemRHVnVZMlV2VW1WMmFYUlRaWEoyYVdObGN5VXlReVV5TUZabGNuTnBiMjRsTTBReUxqRXVNQzQzTnpNekpUSkRKVEl3UTNWc2RIVnlaU1V6Ukc1bGRYUnlZV3dsTWtNbE1qQlFkV0pzYVdOTFpYbFViMnRsYmlVelJHNTFiR3dpUGcwS1BITjBjbWx1WjBsRUlHbGtQU0p5WldZdE15SStPREZpWW1KallXRXRPRGMyTVMwMFptTXhMV0poWkRRdFlUZzRaR1k1WlRNeVl6bGpMVEF3TURVMU5UbGhQQzl6ZEhKcGJtZEpSRDROQ2p4cGJuUkpSRDR6TkRrMU9UUThMMmx1ZEVsRVBnMEtQQzloTVRwVFpYSnBZV3hwZW1GaWJHVkpaRDROQ2p3dlUwOUJVQzFGVGxZNlFtOWtlVDROQ2p3dlUwOUJVQzFGVGxZNlJXNTJaV3h2Y0dVK0RRbz08L0Jhc2UtMC0xMF9EYXRhPg0KPEJhc2UtMC0xMF9IYXNOZXN0ZWREYXRhPmZhbHNlPC9CYXNlLTAtMTBfSGFzTmVzdGVkRGF0YT4NCjwvYTE6Q2FsbFNpdGVfeDAwMkJfVHJhY2VTZXJpYWxpc2VySGVscGVyPg0KPC9TT0FQLUVOVjpCb2R5Pg0KPC9TT0FQLUVOVjpFbnZlbG9wZT4NCg=="
+      }
+    }
+  ],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.1.0.7500",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "File Path",
+        "Id": "e9103c2ccc254646aec4f781abdfe839",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -310.81951513652132,
+        "Y": 26.498455359684087
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Level",
+        "Id": "5bb07983e8b8404fa3f68dba3302eaff",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 161.21884976081151,
+        "Y": 436.81449520975855
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Start Point",
+        "Id": "c077441a58244cf48b39226c39531e65",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 295.15984230185768,
+        "Y": 120.32206151935324
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Column Type",
+        "Id": "589d649824dd4dab8000a2cd6c769b7e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 155.52934045570026,
+        "Y": 561.87561629141123
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Data.ImportExcel",
+        "Id": "7e564aa7d2194ce4b849ec7705ba1044",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -37.325436696580084,
+        "Y": 245.21442363688439
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "8c52d282f40a4f348aa15b500c3a4c76",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -285.79658423313219,
+        "Y": 129.84561098197918
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "File From Path",
+        "Id": "e0756cb9c969441e9446203ddea077d3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -140.22377519562281,
+        "Y": 22.768409215282233
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "36b97d426e1d4465b9800bb5cb5f935f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -326.25368308326983,
+        "Y": 270.13671584839096
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Line.ByStartPointEndPoint",
+        "Id": "dc82a4c25e124622b65752cd0fcdb4bb",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 541.12014686566226,
+        "Y": 150.09508885401263
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "End Point",
+        "Id": "15410d0e15c34ef3b5a8a230f801c5a6",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 284.102886410544,
+        "Y": 259.016269914545
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "db612c9eb46c4e0dad43d9f6a231d2d5",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 382.99666116833646,
+        "Y": 432.75631924717385
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "1d422df154554e17b66ec874c1768f69",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 387.31095233528436,
+        "Y": 556.05564894079055
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "54789a6003d048ec97e66c10564c5aa4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 678.3329224658803,
+        "Y": 578.50531571742124
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "8a9781d38d964c619ef05ad037c9a565",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 570.46582632660875,
+        "Y": 288.10923394076349
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "b5bdbddd8a714b7cb93a7ba875f34bd9",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 910.752365374728,
+        "Y": 15.979978923548657
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "831635781571428ca407176c658179d3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 470.132225558398,
+        "Y": -174.10214035191578
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "StructuralFraming.ColumnByCurve",
+        "Id": "02439262a62743a7bd6047e41cc7abaf",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 914.70496928701937,
+        "Y": 359.87927856901211
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "b763bd10dfe14445af419b097f60e651",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 94.363162898314272,
+        "Y": -167.61540532637326
+      }
+    ],
+    "Annotations": [],
+    "X": 341.9584832132212,
+    "Y": 108.97885894741134,
+    "Zoom": 0.71497269414458431
+  }
+}

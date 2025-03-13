@@ -1,0 +1,799 @@
+{
+  "Uuid": "aab66187-8f57-4aa9-98c1-22becee97749",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "PlaceRooms",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+      "HintPath": "D:\\Development\\BIM\\Rooms.xlsx",
+      "InputValue": "D:\\Development\\BIM\\Rooms.xlsx",
+      "NodeType": "ExtensionNode",
+      "Id": "e9103c2ccc254646aec4f781abdfe839",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f364abc5fee74a4aa3bce91cde02e444",
+          "Name": "",
+          "Description": "Filename",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows you to select a file on the system to get its filename"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.FileObject, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "df1828496d78425ca6547b73ba91ee0f",
+      "Inputs": [
+        {
+          "Id": "1aa0fac7e7154c3f92a816f46cfdd778",
+          "Name": "path",
+          "Description": "Path to the file.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e7615f425e8a4ca1bed6f38e3c210db5",
+          "Name": "file",
+          "Description": "File object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a file object from a path."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Rooms",
+      "Id": "5bb07983e8b8404fa3f68dba3302eaff",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "328245884b0a4ddba3f4a75ed8648b2a",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "89d5dabcb2084e99b166bd784fa19297",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8afe4b0f5bab4b14ae493cad8696f7cd",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSOffice.Data.ImportExcel@var,string,bool,bool",
+      "Id": "d90fe911e7ef41e99b63dafb3607aa85",
+      "Inputs": [
+        {
+          "Id": "83a49f64f4f54944a14ccd8eed47910d",
+          "Name": "file",
+          "Description": "File representing the Microsoft Excel spreadsheet.\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e3a79f373ea74b8d86d68093e36cbf76",
+          "Name": "sheetName",
+          "Description": "Name of the worksheet containing the data.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "59185e90cccf408a8f1e23374b4cffbc",
+          "Name": "readAsStrings",
+          "Description": "Toggle to switch between reading Excel file as strings.\n\nbool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6b26dfa365ec40969ead54390b6578a4",
+          "Name": "showExcel",
+          "Description": "Toggle to switch between showing and hiding the main Excel window.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ebc880085cd94391bd9a6bcdd3059c7e",
+          "Name": "data",
+          "Description": "Rows of data from the Excel worksheet.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Read data from a Microsoft Excel spreadsheet. Data is read by row and returned in a series of lists by row. Rows and columns are zero-indexed; for example, the value in cell A1 will appear in the data list at [0,0]. This node requires Microsoft Excel to be installed.\n\nData.ImportExcel (file: var, sheetName: string, readAsStrings: bool = false, showExcel: bool = true): var[][]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.FirstItem@var[]..[]",
+      "Id": "025ad72f6a844d99bf009852e7b475d4",
+      "Inputs": [
+        {
+          "Id": "50dbcd3cb0ae475395dc3c639273fb44",
+          "Name": "list",
+          "Description": "List to get the first item from.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "610ecadea9f840d08dcc2c7e7baf8614",
+          "Name": "item",
+          "Description": "First item in the list.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Returns the first item in a list.\n\nList.FirstItem (list: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.RestOfItems@var[]..[]",
+      "Id": "9ca35d8f73e345b390cc1a8b4ccce1ba",
+      "Inputs": [
+        {
+          "Id": "9fea363a680f4dc88b26eb9f6c17f06d",
+          "Name": "list",
+          "Description": "List to get the rest of.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c6b13358a0964c5283b78a657c86b0b1",
+          "Name": "rest",
+          "Description": "Rest of the list.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Removes the first item from the given list.\n\nList.RestOfItems (list: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "76461628d06a4dd1abef1f2b280f3ce3",
+      "Inputs": [
+        {
+          "Id": "bbcdbd8338fc4c9a8f52b939071b9a2d",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9b6502a10d5742308c3378544b8b50a3",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
+      "Id": "e661c86cf5514e80af7b830bae94e0a6",
+      "Inputs": [
+        {
+          "Id": "c42e3743cddb4c638b99b9b26afa7513",
+          "Name": "list",
+          "Description": "List to fetch an item from.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bb50aa64d7294ea5beb1ddb89b23ade8",
+          "Name": "index",
+          "Description": "Index of the item to be fetched.\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "803d75444dbe4e379e114c4fea3864dc",
+          "Name": "item",
+          "Description": "Item in the list at the given index.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Returns an item from the given list that's located at the specified index.\n\nList.GetItemAtIndex (list: var[]..[], index: int): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "0;\n1;\n2;\n3;",
+      "Id": "8fa7e1eb8642469c87a42ace737c6e88",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2c0bea2a360f4362b270eec5f0870a9c",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d60fc797990845bcbb59409902d80962",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a893561d755542368c186e5e2819ace5",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "92e8244d5b934c6fa21ab61deed54ce2",
+          "Name": "",
+          "Description": "Value of expression at line 4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
+      "Id": "09778514bfc349eb82c6a4931841838e",
+      "Inputs": [
+        {
+          "Id": "91c81287dcba4a3592c84d4e22817d32",
+          "Name": "list",
+          "Description": "List to fetch an item from.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6cd7c8af641c4f2495a950bef39f1fbb",
+          "Name": "index",
+          "Description": "Index of the item to be fetched.\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ec500ae73cdd402b8be5b9b17b0963d3",
+          "Name": "item",
+          "Description": "Item in the list at the given index.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Returns an item from the given list that's located at the specified index.\n\nList.GetItemAtIndex (list: var[]..[], index: int): var[]..[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "b9e62cfcca3842068f99bdaafa65b315",
+      "Inputs": [
+        {
+          "Id": "f1e01e0b12924162b366b064c33fab83",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "91d0d0c1f18a4bfdae6e535d239cf5f1",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "38c9ff3a-849f-4bd4-b12a-e9d69939f3e3",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "dc2b4a8cfacf4c84928f74df0ab56e63",
+      "Inputs": [
+        {
+          "Id": "effe588d78294251a97da06697a15626",
+          "Name": "names",
+          "Description": "string[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6b2a15ea698543a6a3934c61f33aa59f",
+          "Name": "numbers",
+          "Description": "string[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b484bb31585743698f39a76e6fa79b6a",
+          "Name": "phase",
+          "Description": " If no phase is specified, the node will use the last phase in the project\n\nvar\nDefault value : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "411dedb462c9400cbb321e6bbcbb5679",
+          "Name": "room",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Creates an unplaced room"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
+      "Id": "9e2a898fa5954e609afcffa3029e3cb2",
+      "Inputs": [
+        {
+          "Id": "31ed377162264a21b3051220804f29ae",
+          "Name": "list",
+          "Description": "List to fetch an item from.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7064e9c7b3834772969f4a00e28b518b",
+          "Name": "index",
+          "Description": "Index of the item to be fetched.\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "482e44aa7092484688f6072a554e41ae",
+          "Name": "item",
+          "Description": "Item in the list at the given index.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Returns an item from the given list that's located at the specified index.\n\nList.GetItemAtIndex (list: var[]..[], index: int): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
+      "Id": "848f52fffe704c16bbbcdad982daa0c2",
+      "Inputs": [
+        {
+          "Id": "7401aec2cb584047bfb2e33567b8bd9e",
+          "Name": "list",
+          "Description": "List to fetch an item from.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d4eae8fe9dea4d52ba3f1f510f491098",
+          "Name": "index",
+          "Description": "Index of the item to be fetched.\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b7a5c11cbcdb4e2e98241c8b34887ea3",
+          "Name": "item",
+          "Description": "Item in the list at the given index.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Returns an item from the given list that's located at the specified index.\n\nList.GetItemAtIndex (list: var[]..[], index: int): var[]..[]"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "f364abc5fee74a4aa3bce91cde02e444",
+      "End": "1aa0fac7e7154c3f92a816f46cfdd778",
+      "Id": "86b47c1b245941bd849458d058fb368f"
+    },
+    {
+      "Start": "e7615f425e8a4ca1bed6f38e3c210db5",
+      "End": "83a49f64f4f54944a14ccd8eed47910d",
+      "Id": "10a1cc44c9ca4212a3c163205c9927ee"
+    },
+    {
+      "Start": "328245884b0a4ddba3f4a75ed8648b2a",
+      "End": "e3a79f373ea74b8d86d68093e36cbf76",
+      "Id": "e1a1aa14800f4244a1de3a2b6a97d502"
+    },
+    {
+      "Start": "8afe4b0f5bab4b14ae493cad8696f7cd",
+      "End": "59185e90cccf408a8f1e23374b4cffbc",
+      "Id": "be45051b133748cb9e92df7b5e3ced16"
+    },
+    {
+      "Start": "ebc880085cd94391bd9a6bcdd3059c7e",
+      "End": "50dbcd3cb0ae475395dc3c639273fb44",
+      "Id": "ed84672bbb8c414293cf206885045d69"
+    },
+    {
+      "Start": "ebc880085cd94391bd9a6bcdd3059c7e",
+      "End": "9fea363a680f4dc88b26eb9f6c17f06d",
+      "Id": "0dd9ede0576e40e1b2f56eb5d2600763"
+    },
+    {
+      "Start": "610ecadea9f840d08dcc2c7e7baf8614",
+      "End": "bbcdbd8338fc4c9a8f52b939071b9a2d",
+      "Id": "15d3b8097cc6427db505c61ac4334c9e"
+    },
+    {
+      "Start": "c6b13358a0964c5283b78a657c86b0b1",
+      "End": "c42e3743cddb4c638b99b9b26afa7513",
+      "Id": "cc28f213f4014c1692c7e374a0df13e2"
+    },
+    {
+      "Start": "c6b13358a0964c5283b78a657c86b0b1",
+      "End": "f1e01e0b12924162b366b064c33fab83",
+      "Id": "0d40b5a0ad0d48d49f74295a203e691a"
+    },
+    {
+      "Start": "c6b13358a0964c5283b78a657c86b0b1",
+      "End": "91c81287dcba4a3592c84d4e22817d32",
+      "Id": "526fb332b42c4061bd537f3edbf08b31"
+    },
+    {
+      "Start": "c6b13358a0964c5283b78a657c86b0b1",
+      "End": "31ed377162264a21b3051220804f29ae",
+      "Id": "22264e6ee09646cb8747393055a7b179"
+    },
+    {
+      "Start": "c6b13358a0964c5283b78a657c86b0b1",
+      "End": "7401aec2cb584047bfb2e33567b8bd9e",
+      "Id": "dd5f1ae5b883463b99f3e7fd4822d7ca"
+    },
+    {
+      "Start": "803d75444dbe4e379e114c4fea3864dc",
+      "End": "effe588d78294251a97da06697a15626",
+      "Id": "6b3bbdc9bc354c97a61f5e1c9e97a36a"
+    },
+    {
+      "Start": "2c0bea2a360f4362b270eec5f0870a9c",
+      "End": "bb50aa64d7294ea5beb1ddb89b23ade8",
+      "Id": "094c2270bf3641d886d2f7f6822dc61c"
+    },
+    {
+      "Start": "d60fc797990845bcbb59409902d80962",
+      "End": "6cd7c8af641c4f2495a950bef39f1fbb",
+      "Id": "75020ce5e3524d978d41a4767be7ad15"
+    },
+    {
+      "Start": "a893561d755542368c186e5e2819ace5",
+      "End": "7064e9c7b3834772969f4a00e28b518b",
+      "Id": "2b12138cd2aa42a8b14139f035c68b29"
+    },
+    {
+      "Start": "92e8244d5b934c6fa21ab61deed54ce2",
+      "End": "d4eae8fe9dea4d52ba3f1f510f491098",
+      "Id": "67e629ea51634421a930ce3f794892ae"
+    }
+  ],
+  "Dependencies": [
+    "38c9ff3a-849f-4bd4-b12a-e9d69939f3e3"
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.1.0.7500",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "File Path",
+        "Id": "e9103c2ccc254646aec4f781abdfe839",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 57.541020682804,
+        "Y": 376.43715051188894
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "File From Path",
+        "Id": "df1828496d78425ca6547b73ba91ee0f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 280.94849089945177,
+        "Y": 509.75658893462776
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "5bb07983e8b8404fa3f68dba3302eaff",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 202.486715328152,
+        "Y": 607.6469946473926
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "89d5dabcb2084e99b166bd784fa19297",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 150.92611995272642,
+        "Y": 685.36151521325144
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Data.ImportExcel",
+        "Id": "d90fe911e7ef41e99b63dafb3607aa85",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 413.95988186794096,
+        "Y": 507.5148239183053
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.FirstItem",
+        "Id": "025ad72f6a844d99bf009852e7b475d4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 678.40075089408413,
+        "Y": 409.28019424413412
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.RestOfItems",
+        "Id": "9ca35d8f73e345b390cc1a8b4ccce1ba",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 683.70653123640841,
+        "Y": 626.81718827942825
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "76461628d06a4dd1abef1f2b280f3ce3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 871.91256252680159,
+        "Y": 345.18864105163885
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.GetItemAtIndex",
+        "Id": "e661c86cf5514e80af7b830bae94e0a6",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 926.64044498817111,
+        "Y": 624.41321274835866
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "8fa7e1eb8642469c87a42ace737c6e88",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 756.00508028492709,
+        "Y": 757.48733364900181
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.GetItemAtIndex",
+        "Id": "09778514bfc349eb82c6a4931841838e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 933.07951535433131,
+        "Y": 785.3899719023625
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "b9e62cfcca3842068f99bdaafa65b315",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 546.842672049246,
+        "Y": 713.4918295155062
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Room.UnplacedByNameAndNumber",
+        "Id": "dc2b4a8cfacf4c84928f74df0ab56e63",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1157.7485984091456,
+        "Y": 624.75670064584131
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.GetItemAtIndex",
+        "Id": "9e2a898fa5954e609afcffa3029e3cb2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 936.78677596838725,
+        "Y": 941.79090889437271
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.GetItemAtIndex",
+        "Id": "848f52fffe704c16bbbcdad982daa0c2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 937.82243711375031,
+        "Y": 1080.5695023730148
+      }
+    ],
+    "Annotations": [],
+    "X": 264.97251085022526,
+    "Y": -220.16186261779586,
+    "Zoom": 0.72617665429117462
+  }
+}

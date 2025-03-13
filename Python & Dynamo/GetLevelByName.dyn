@@ -1,0 +1,165 @@
+{
+  "Uuid": "aab66187-8f57-4aa9-98c1-22becee97749",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "GetLevelByName",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Import necessary modules\r\nimport clr\r\n\r\n# Import Revit Services\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\n# Import Revit API\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import FilteredElementCollector, BuiltInCategory, Level\r\n\r\n# Get the current Revit document\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# Input: Level name to search for\r\nlevel_name = IN[0]  # Input comes from Dynamo\r\n\r\n# Collect all levels in the project\r\nlevels_collector = FilteredElementCollector(doc)\\\r\n    .OfCategory(BuiltInCategory.OST_Levels)\\\r\n    .WhereElementIsNotElementType()\r\n\r\n# Find the level by name\r\nmatched_level = None\r\n\r\nfor level in levels_collector:\r\n    if level.Name == level_name:\r\n        matched_level = level\r\n        break\r\n\r\nif matched_level is None:\r\n\tmatched_level = levels_collector.FirstElement()\r\n\r\n# Output the matched level or None if not found\r\nOUT = matched_level\r\n",
+      "VariableInputPorts": true,
+      "Id": "de2b6a841ea74976843e7fbb2e4ccc4f",
+      "Inputs": [
+        {
+          "Id": "d1d5af5eb2c94e548532990283907b68",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d975da0f6b364718a06769b14ec1a07f",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "b9cb76089ec24fd098ede6d2df092789",
+      "Inputs": [
+        {
+          "Id": "0654ea32a39b4d5c9d8267f4464cb4dd",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "cea85588bf6d4cfab31cc74803960dab",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Level1",
+      "Id": "06d6e3ca2daa4537a59f32a7f7edac74",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9f9a0a84383b4c058c9c9d6e99a04d11",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "d975da0f6b364718a06769b14ec1a07f",
+      "End": "0654ea32a39b4d5c9d8267f4464cb4dd",
+      "Id": "1cb40b2f76eb4a1fb00e5951f66844fe"
+    },
+    {
+      "Start": "9f9a0a84383b4c058c9c9d6e99a04d11",
+      "End": "d1d5af5eb2c94e548532990283907b68",
+      "Id": "f504e90c4f1649a5ae82f6bfb848f42f"
+    }
+  ],
+  "Dependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.1.0.7500",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "de2b6a841ea74976843e7fbb2e4ccc4f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 475.46488580870783,
+        "Y": 237.94667327745793
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "b9cb76089ec24fd098ede6d2df092789",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 688.86336897730462,
+        "Y": 226.94667327745793
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "06d6e3ca2daa4537a59f32a7f7edac74",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 319.066402640111,
+        "Y": 250.44667327745793
+      }
+    ],
+    "Annotations": [],
+    "X": -334.355031227024,
+    "Y": -181.50937572616567,
+    "Zoom": 1.7740436120183838
+  }
+}

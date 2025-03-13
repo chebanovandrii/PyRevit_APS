@@ -1,0 +1,600 @@
+{
+  "Uuid": "aab66187-8f57-4aa9-98c1-22becee97749",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "CreateLevels",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSOffice.Data.ImportExcel@var,string,bool,bool",
+      "Id": "3ffdda6f50a84be682b010887c262d81",
+      "Inputs": [
+        {
+          "Id": "375977eb31a54294b528f5ed2f61b13e",
+          "Name": "file",
+          "Description": "File representing the Microsoft Excel spreadsheet.\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "abcc5498323a40969f27f963ee2a4766",
+          "Name": "sheetName",
+          "Description": "Name of the worksheet containing the data.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a274ccade869410c985a4897901b06d0",
+          "Name": "readAsStrings",
+          "Description": "Toggle to switch between reading Excel file as strings.\n\nbool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ddbd996449014433b93f8541ef6a1460",
+          "Name": "showExcel",
+          "Description": "Toggle to switch between showing and hiding the main Excel window.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3562ad1aea7644c6ae6e2adad82f5aaf",
+          "Name": "data",
+          "Description": "Rows of data from the Excel worksheet.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Read data from a Microsoft Excel spreadsheet. Data is read by row and returned in a series of lists by row. Rows and columns are zero-indexed; for example, the value in cell A1 will appear in the data list at [0,0]. This node requires Microsoft Excel to be installed.\n\nData.ImportExcel (file: var, sheetName: string, readAsStrings: bool = false, showExcel: bool = true): var[][]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Levels",
+      "Id": "532fcd5602bb4eafbc521c78e5ab478d",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "072c9696b9944e8fba109e83c6c40a9b",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.Transpose@var[]..[]",
+      "Id": "ffbb058385f242eab3776f8338f50ed0",
+      "Inputs": [
+        {
+          "Id": "2dd6a07928704deab6ee4bedae5fe9ea",
+          "Name": "lists",
+          "Description": "A list of lists to be transposed.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f049b00cc30442da98839d29e5c02df9",
+          "Name": "lists",
+          "Description": "A list of transposed lists.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Swaps rows and columns in a list of lists. If there are some rows that are shorter than others, null values are inserted as place holders in the resultant array such that it is always rectangular.\n\nList.Transpose (lists: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.FirstItem@var[]..[]",
+      "Id": "dc867dc410cb43e79ac6766d0b7a03dc",
+      "Inputs": [
+        {
+          "Id": "6009c0e5a6bb47dd86336ea29150a53d",
+          "Name": "list",
+          "Description": "List to get the first item from.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fb798ebc0d084712b7415841f0199834",
+          "Name": "item",
+          "Description": "First item in the list.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Returns the first item in a list.\n\nList.FirstItem (list: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.LastItem@var[]..[]",
+      "Id": "8b98049fae4f41309986db7a89d2256a",
+      "Inputs": [
+        {
+          "Id": "1cc4ed34ab4e4309bc5371de8f955c26",
+          "Name": "list",
+          "Description": "List to get the last item of.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "adaaeb51f9e2450cb2f9df8d780d386d",
+          "Name": "last",
+          "Description": "Last item in the list.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Retrieves the last item in a list.\n\nList.LastItem (list: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.Level.ByElevationAndName@double,string",
+      "Id": "822a0737ce194a56a6f49152f2cc5812",
+      "Inputs": [
+        {
+          "Id": "571e9ff6a7774a86a6aed768e6a1f8b8",
+          "Name": "elevation",
+          "Description": "double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3d2fe40d4a6b430fb17614550c5d3301",
+          "Name": "name",
+          "Description": "string",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f76319302600457aadabb7bc820b87e4",
+          "Name": "Level",
+          "Description": "Level",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create a Revit Level given it's elevation and name in the project\n\nLevel.ByElevationAndName (elevation: double, name: string): Level"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.Views.FloorPlanView.ByLevel@Revit.Elements.Level",
+      "Id": "c1c4fcfb05f7424a85babc778efbd8b0",
+      "Inputs": [
+        {
+          "Id": "7bf15c99041d4bad85e5644e97a88dfb",
+          "Name": "level",
+          "Description": "Level",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f5fc71d553734b5a9f28dd94f3acb1ed",
+          "Name": "FloorPlanView",
+          "Description": "FloorPlanView",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create a Revit Floor Plan at a given Level\n\nFloorPlanView.ByLevel (level: Level): FloorPlanView"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.Views.CeilingPlanView.ByLevel@Revit.Elements.Level",
+      "Id": "0922ed375e574500860f35190ed54933",
+      "Inputs": [
+        {
+          "Id": "ca4d4e5927a04fb5b050fd9c53eb2f75",
+          "Name": "level",
+          "Description": "Level",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b0dae0b37dcb4c33ba19f39465be5cee",
+          "Name": "CeilingPlanView",
+          "Description": "CeilingPlanView",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create a Revit Floor Plan at a given Level\n\nCeilingPlanView.ByLevel (level: Level): CeilingPlanView"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.Views.StructuralPlanView.ByLevel@Revit.Elements.Level",
+      "Id": "5ae9f3748ed5445882c2f37782c9e9d8",
+      "Inputs": [
+        {
+          "Id": "b729230d2e434d20b4f6ee336628e12f",
+          "Name": "level",
+          "Description": "The Level on which the StructuralPlanView is based.\n\nLevel",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "254b40d9897d475c8ae8d6acd95e9fe4",
+          "Name": "StructuralPlanView",
+          "Description": "A StructuralPlanView if successful.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create a Structural Plan View at the given Level.\n\nStructuralPlanView.ByLevel (level: Level): StructuralPlanView"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+      "HintPath": "C:\\Users\\TopSky\\Pictures\\Development\\Work\\APS_Coordinator\\Projects\\Scripts\\APS\\Extract.xlsx",
+      "InputValue": "..\\..\\Projects\\Scripts\\APS\\Extract.xlsx",
+      "NodeType": "ExtensionNode",
+      "Id": "afbd1c3fb8e74e3cab384092c3b75538",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "22c033a11d894665a16dfd13755603fa",
+          "Name": "",
+          "Description": "Filename",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows you to select a file on the system to get its filename"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.FileObject, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "9ac2fd7a04104268a40e573384eeaf83",
+      "Inputs": [
+        {
+          "Id": "56a5da7be7e0490aacb9e0148c15ed59",
+          "Name": "path",
+          "Description": "Path to the file.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0de14641de0743369f94bf3cda95dbaf",
+          "Name": "file",
+          "Description": "File object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a file object from a path."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "aa675483a6854e828597bf89beca1873",
+      "Inputs": [
+        {
+          "Id": "ce4bf5d8534a43968ae06288afce10a4",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6e150c1cec1246f9bf60c08bf47bdb55",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "3562ad1aea7644c6ae6e2adad82f5aaf",
+      "End": "ce4bf5d8534a43968ae06288afce10a4",
+      "Id": "a4d5b4043e39441e85e32c099008d7f7"
+    },
+    {
+      "Start": "072c9696b9944e8fba109e83c6c40a9b",
+      "End": "abcc5498323a40969f27f963ee2a4766",
+      "Id": "bd70e9542c514e238e1738b2d7257cc0"
+    },
+    {
+      "Start": "f049b00cc30442da98839d29e5c02df9",
+      "End": "6009c0e5a6bb47dd86336ea29150a53d",
+      "Id": "215908b511fe45478d6d10a9fc182608"
+    },
+    {
+      "Start": "f049b00cc30442da98839d29e5c02df9",
+      "End": "1cc4ed34ab4e4309bc5371de8f955c26",
+      "Id": "93e74f2ebd6c4e9e8db2e09f4402f614"
+    },
+    {
+      "Start": "fb798ebc0d084712b7415841f0199834",
+      "End": "3d2fe40d4a6b430fb17614550c5d3301",
+      "Id": "20765d95e7434e6aae4fd2dca1f71870"
+    },
+    {
+      "Start": "adaaeb51f9e2450cb2f9df8d780d386d",
+      "End": "571e9ff6a7774a86a6aed768e6a1f8b8",
+      "Id": "13a69ce578ec490ea2a56e49a7bb06be"
+    },
+    {
+      "Start": "f76319302600457aadabb7bc820b87e4",
+      "End": "ca4d4e5927a04fb5b050fd9c53eb2f75",
+      "Id": "63832d8424cb468abc90b5f1967d9ed9"
+    },
+    {
+      "Start": "f76319302600457aadabb7bc820b87e4",
+      "End": "7bf15c99041d4bad85e5644e97a88dfb",
+      "Id": "6034d564701045e5b565a383b7acd328"
+    },
+    {
+      "Start": "f76319302600457aadabb7bc820b87e4",
+      "End": "b729230d2e434d20b4f6ee336628e12f",
+      "Id": "da2bf0a8e9bb4c7bb348c0bd5763ee49"
+    },
+    {
+      "Start": "22c033a11d894665a16dfd13755603fa",
+      "End": "56a5da7be7e0490aacb9e0148c15ed59",
+      "Id": "d9ef052d6d6f4d5f81528ceb94a65945"
+    },
+    {
+      "Start": "0de14641de0743369f94bf3cda95dbaf",
+      "End": "375977eb31a54294b528f5ed2f61b13e",
+      "Id": "779548327268403f9aa52092c8c1883d"
+    },
+    {
+      "Start": "6e150c1cec1246f9bf60c08bf47bdb55",
+      "End": "2dd6a07928704deab6ee4bedae5fe9ea",
+      "Id": "ce9e020878e948a79a3b288abb04e2b1"
+    }
+  ],
+  "Dependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.1.0.7500",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Data.ImportExcel",
+        "Id": "3ffdda6f50a84be682b010887c262d81",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 467.0,
+        "Y": 103.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "532fcd5602bb4eafbc521c78e5ab478d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 309.0,
+        "Y": 208.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.Transpose",
+        "Id": "ffbb058385f242eab3776f8338f50ed0",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 757.0,
+        "Y": 132.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.FirstItem",
+        "Id": "dc867dc410cb43e79ac6766d0b7a03dc",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 959.67290417570689,
+        "Y": 27.421603113156593
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.LastItem",
+        "Id": "8b98049fae4f41309986db7a89d2256a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 970.7502621507399,
+        "Y": 232.46592190706241
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Level.ByElevationAndName",
+        "Id": "822a0737ce194a56a6f49152f2cc5812",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1175.8947794089611,
+        "Y": 99.647243868363944
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "FloorPlanView.ByLevel",
+        "Id": "c1c4fcfb05f7424a85babc778efbd8b0",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1445.7132391383384,
+        "Y": 112.0494644099158
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "CeilingPlanView.ByLevel",
+        "Id": "0922ed375e574500860f35190ed54933",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1442.3378606970991,
+        "Y": 10.788111172734745
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "StructuralPlanView.ByLevel",
+        "Id": "5ae9f3748ed5445882c2f37782c9e9d8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1439.4954634754849,
+        "Y": 243.59151125764362
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "File Path",
+        "Id": "afbd1c3fb8e74e3cab384092c3b75538",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 108.44735575281436,
+        "Y": 90.8321684037594
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "File From Path",
+        "Id": "9ac2fd7a04104268a40e573384eeaf83",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 280.39554554111658,
+        "Y": 118.47302424696784
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "aa675483a6854e828597bf89beca1873",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 595.00150303122348,
+        "Y": 281.39117211408609
+      }
+    ],
+    "Annotations": [],
+    "X": -19.388247833643959,
+    "Y": 129.92815832076536,
+    "Zoom": 0.58355146808764569
+  }
+}

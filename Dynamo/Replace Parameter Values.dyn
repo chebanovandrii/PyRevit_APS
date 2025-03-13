@@ -1,0 +1,313 @@
+{
+  "Uuid": "46c5bfa0-65f0-49de-a7c0-2451aea05e5f",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Replace Parameter Values",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "41513b994a724940bbfed66ec011543c",
+      "Name": "Parameter Name",
+      "Type": "string",
+      "Value": "Enter Parameter Name",
+      "Description": "Creates a string."
+    },
+    {
+      "Id": "f888e51f670d424e9ecd591c99c9c3a8",
+      "Name": "New Value",
+      "Type": "string",
+      "Value": "Enter New Value",
+      "Description": "Creates a string."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Import necessary Revit and Dynamo modules\r\nimport clr\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitAPIUI')\r\nclr.AddReference('RevitServices')\r\nfrom Autodesk.Revit.DB import *\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\nfrom Autodesk.Revit.UI import TaskDialog, TaskDialogCommonButtons, TaskDialogResult, TaskDialogIcon\r\n\r\nclr.AddReference('System.Windows.Forms')\r\nfrom System.Windows.Forms import Form, TextBox, Label, Button, ComboBox\r\n\r\n# Initialize Revit document\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# Retrieve all categories from the document\r\ncategories = doc.Settings.Categories\r\n\r\n# List to store category names\r\ncategory_names = []\r\n\r\n# Iterate over all categories and filter out those that have elements (i.e., categories that are not hidden)\r\nfor category in categories:\r\n    category_names.append(category.Name)\r\n\r\n# Now, param_name and new_value hold the user input values\r\n# Inputs from Dynamo\r\nelements = UnwrapElement(IN[0])  # All elements of the selected category\r\nparam_name = IN[1]\r\nnew_value = IN[2]\r\n\r\n# List to store IDs of modified elements\r\nmodified_ids = []\r\n\r\n# Begin a transaction in Revit\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n# Iterate through each element\r\nfor elem in elements:\r\n    # Get the parameter by name\r\n    param = elem.LookupParameter(param_name)\r\n    \r\n    # Check if the parameter exists and is writable\r\n    if param and param.IsReadOnly == False:\r\n        # Set the new value\r\n        if param.StorageType == StorageType.String:\r\n            param.Set(str(new_value))\r\n        elif param.StorageType == StorageType.Double:\r\n            param.Set(float(new_value))\r\n        elif param.StorageType == StorageType.Integer:\r\n            param.Set(int(new_value))\r\n        \r\n        # Add the element ID to the modified list\r\n        modified_ids.append(elem.Id.IntegerValue)\r\n\r\n# Commit the transaction\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\n# Output the list of modified element IDs# Display the IDs in a TaskDialog\r\nif modified_ids:\r\n    message = \"Modified Element IDs:\\n\" + \"\\n\".join(map(str, modified_ids))\r\nelse:\r\n    message = \"No elements were modified.\"\r\n\r\ndialog = TaskDialog(\"Test\")\r\ndialog.Title = \"Replace Parameter Values\"\r\ndialog.MainContent = str(len(modified_ids)) + \" Elements were modified. Click OK to continue.\"\r\n#dialog.MainInstruction = \"Click OK to continue\"\r\ndialog.CommonButtons = TaskDialogCommonButtons.Ok\r\n\r\n# Show the dialog and capture the result (you can check if the user clicked OK)\r\nresult = dialog.Show()\r\n\r\nOUT = modified_ids  # Optional: You can keep this to output the list in Dynamo as well\r\n\r\nTransactionManager.Instance.TransactionTaskDone()  # Commit transaction\r\n\r\n\r\n\r\n",
+      "VariableInputPorts": true,
+      "Id": "b9cc8b5ab4704a34be79b53d2885163d",
+      "Inputs": [
+        {
+          "Id": "feb2624a48fa4ff98c2bd89870f57ec1",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ed9dac9e580a40a99127591eafb6a495",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "42a9d0b239af4398a2e7cde065b092cb",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c75f170ddfe542949a9ae281283c8fc5",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.ElementsOfCategory, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "Id": "a82ef8613885447e8ea0e86a6d333723",
+      "Inputs": [
+        {
+          "Id": "5fa6d78863c247749b9002e7694d9f17",
+          "Name": "Category",
+          "Description": "The Category",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "96d44489a7a14f7d80284dc71c55a43f",
+          "Name": "Elements",
+          "Description": "An element type.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Get all elements of the specified category from the model."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "6201a1c35aec4b84ac98fd6705d7bd31",
+      "Inputs": [
+        {
+          "Id": "cfc544c3ab41408bb5d4eb93fe7dc43e",
+          "Name": "",
+          "Description": "Node to evaluate.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "13d6c141cfb44b7bb7f852d3e03bc8b3",
+          "Name": "",
+          "Description": "Watch contents.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 625,
+      "SelectedString": "OST_Windows",
+      "NodeType": "ExtensionNode",
+      "Id": "96afc2c141d941f6b1722342597b99ed",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "ab6a7ff095604b7397899084a30032c0",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Enter Parameter Name",
+      "Id": "41513b994a724940bbfed66ec011543c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9a10b7bf1d0f4afda9546809f1a35558",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "Enter New Value",
+      "Id": "f888e51f670d424e9ecd591c99c9c3a8",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "072fede88c034de29b47ca625201591d",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "c75f170ddfe542949a9ae281283c8fc5",
+      "End": "cfc544c3ab41408bb5d4eb93fe7dc43e",
+      "Id": "75081ed0a4834f88ad28b41b04c02e9f"
+    },
+    {
+      "Start": "96d44489a7a14f7d80284dc71c55a43f",
+      "End": "feb2624a48fa4ff98c2bd89870f57ec1",
+      "Id": "3141ef42e7984991a5ae8be2a4680c00"
+    },
+    {
+      "Start": "ab6a7ff095604b7397899084a30032c0",
+      "End": "5fa6d78863c247749b9002e7694d9f17",
+      "Id": "d4ad66ccc78c42ed9bd2d3cdd3812ad4"
+    },
+    {
+      "Start": "9a10b7bf1d0f4afda9546809f1a35558",
+      "End": "ed9dac9e580a40a99127591eafb6a495",
+      "Id": "ed584ba7236b4b47b89cb8e11f874c9e"
+    },
+    {
+      "Start": "072fede88c034de29b47ca625201591d",
+      "End": "42a9d0b239af4398a2e7cde065b092cb",
+      "Id": "6734d967a2b14d5e84f98c4af5ef2d9a"
+    }
+  ],
+  "Dependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.1.0.7500",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -25.473239960851139,
+      "EyeY": 27.607354289264592,
+      "EyeZ": 101.80245259166263,
+      "LookX": 22.290291223085433,
+      "LookY": -24.1478154916759,
+      "LookZ": -107.73640757824629,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "Id": "b9cc8b5ab4704a34be79b53d2885163d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Python Script",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 724.44713105042649,
+        "Y": 172.11399840221111
+      },
+      {
+        "Id": "a82ef8613885447e8ea0e86a6d333723",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "All Elements of Category",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 488.7886953358676,
+        "Y": 33.418939165340163
+      },
+      {
+        "Id": "6201a1c35aec4b84ac98fd6705d7bd31",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Watch",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 1147.5954978309617,
+        "Y": 81.711026110177116
+      },
+      {
+        "Id": "96afc2c141d941f6b1722342597b99ed",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Categories",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 176.76695223172203,
+        "Y": 57.049934877248319
+      },
+      {
+        "Id": "41513b994a724940bbfed66ec011543c",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Parameter Name",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 228.44479031760784,
+        "Y": 237.90160737413817
+      },
+      {
+        "Id": "f888e51f670d424e9ecd591c99c9c3a8",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "New Value",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 282.34473989060177,
+        "Y": 375.21814557200355
+      }
+    ],
+    "Annotations": [],
+    "X": -59.009094059465724,
+    "Y": 84.621950690652625,
+    "Zoom": 0.77922150823390979
+  }
+}
